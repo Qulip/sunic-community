@@ -25,21 +25,7 @@ public class CommunityLogic implements CommunityFacade {
     @Override
     @Transactional
     public CommunityRdo registerCommunity(CommunityRegisterSdo registerSdo) {
-        Community community = Community.builder()
-                .type(registerSdo.getType())
-                .thumbnail(registerSdo.getThumbnail())
-                .name(registerSdo.getName())
-                .description(registerSdo.getDescription())
-                .managerId(registerSdo.getManagerId())
-                .managerName(registerSdo.getManagerName())
-                .managerEmail(registerSdo.getManagerEmail())
-                .memberCount(0L)
-                .registeredTime(System.currentTimeMillis())
-                .registrant(registerSdo.getRegistrant())
-                .secretNumber(registerSdo.getSecretNumber())
-                .allowSelfJoin(registerSdo.isAllowSelfJoin())
-                .build();
-        
+        Community community = Community.create(registerSdo);
         Community saved = communityStore.save(community);
         return convertToCommunityRdo(saved);
     }
@@ -48,26 +34,7 @@ public class CommunityLogic implements CommunityFacade {
     @Transactional
     public CommunityRdo modifyCommunity(CommunityModifySdo modifySdo) {
         Community existing = communityStore.findById(modifySdo.getId());
-        
-        Community updated = Community.builder()
-                .id(existing.getId())
-                .type(modifySdo.getType() != null ? modifySdo.getType() : existing.getType())
-                .thumbnail(modifySdo.getThumbnail() != null ? modifySdo.getThumbnail() : existing.getThumbnail())
-                .name(modifySdo.getName() != null ? modifySdo.getName() : existing.getName())
-                .description(modifySdo.getDescription() != null ? modifySdo.getDescription() : existing.getDescription())
-                .managerId(existing.getManagerId())
-                .managerName(existing.getManagerName())
-                .managerEmail(existing.getManagerEmail())
-                .memberCount(existing.getMemberCount())
-                .registeredTime(existing.getRegisteredTime())
-                .registrant(existing.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(modifySdo.getModifier())
-                .secretNumber(existing.getSecretNumber())
-                .allowSelfJoin(existing.isAllowSelfJoin())
-                .members(existing.getMembers())
-                .build();
-        
+        Community updated = existing.modify(modifySdo);
         Community saved = communityStore.update(updated);
         return convertToCommunityRdo(saved);
     }
@@ -104,15 +71,11 @@ public class CommunityLogic implements CommunityFacade {
             throw new MembershipException("Invalid secret number for community");
         }
         
-        Member member = Member.builder()
-                .communityId(joinSdo.getCommunityId())
-                .userId(joinSdo.getUserId())
-                .joinedTime(System.currentTimeMillis())
-                .registrant(joinSdo.getRegistrant())
-                .build();
-        
+        Member member = Member.create(joinSdo);
         memberStore.save(member);
-        communityStore.incrementMemberCount(joinSdo.getCommunityId());
+        
+        Community updatedCommunity = community.addMember();
+        communityStore.update(updatedCommunity);
     }
     
     @Override
@@ -123,7 +86,10 @@ public class CommunityLogic implements CommunityFacade {
         }
         
         memberStore.deleteByUserIdAndCommunityId(leaveSdo.getUserId(), leaveSdo.getCommunityId());
-        communityStore.decrementMemberCount(leaveSdo.getCommunityId());
+        
+        Community community = communityStore.findById(leaveSdo.getCommunityId());
+        Community updatedCommunity = community.removeMember();
+        communityStore.update(updatedCommunity);
     }
     
     @Override

@@ -24,15 +24,7 @@ public class PostLogic implements PostFacade {
     @Override
     @Transactional
     public PostRdo createPost(PostCreateSdo createSdo) {
-        Post post = Post.builder()
-                .title(createSdo.getTitle())
-                .content(createSdo.getContent())
-                .postType(createSdo.getPostType())
-                .communityId(createSdo.getCommunityId())
-                .registeredTime(System.currentTimeMillis())
-                .registrant(createSdo.getRegistrant())
-                .build();
-        
+        Post post = Post.create(createSdo);
         Post saved = postStore.save(post);
         return convertToPostRdo(saved);
     }
@@ -41,19 +33,7 @@ public class PostLogic implements PostFacade {
     @Transactional
     public PostRdo updatePost(PostUpdateSdo updateSdo) {
         Post existing = postStore.findById(updateSdo.getId());
-        
-        Post updated = Post.builder()
-                .id(existing.getId())
-                .title(updateSdo.getTitle() != null ? updateSdo.getTitle() : existing.getTitle())
-                .content(updateSdo.getContent() != null ? updateSdo.getContent() : existing.getContent())
-                .postType(updateSdo.getPostType() != null ? updateSdo.getPostType() : existing.getPostType())
-                .communityId(existing.getCommunityId())
-                .registeredTime(existing.getRegisteredTime())
-                .registrant(existing.getRegistrant())
-                .modifiedTime(System.currentTimeMillis())
-                .modifier(updateSdo.getModifier())
-                .build();
-        
+        Post updated = existing.update(updateSdo);
         Post saved = postStore.update(updated);
         return convertToPostRdo(saved);
     }
@@ -98,13 +78,7 @@ public class PostLogic implements PostFacade {
     @Override
     @Transactional
     public CommentRdo createComment(CommentCreateSdo createSdo) {
-        Comment comment = Comment.builder()
-                .content(createSdo.getContent())
-                .postId(createSdo.getPostId())
-                .registeredTime(System.currentTimeMillis())
-                .registrant(createSdo.getRegistrant())
-                .build();
-        
+        Comment comment = Comment.create(createSdo);
         Comment saved = commentStore.save(comment);
         return convertToCommentRdo(saved);
     }
