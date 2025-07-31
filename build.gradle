@@ -1,0 +1,112 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.4-SNAPSHOT' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+allprojects {
+    group = 'com.sunic'
+    version = '0.0.1-SNAPSHOT'
+    
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.spring.io/snapshot' }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+    
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+    
+    dependencies {
+        // Common dependencies for all modules
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        
+        // Test dependencies
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        testImplementation 'org.assertj:assertj-core'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+    
+    test {
+        useJUnitPlatform()
+    }
+}
+
+// Configure specific modules
+configure(project(':community-spec')) {
+    description = 'Domain contracts and specifications'
+}
+
+configure(project(':community-aggregate')) {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    description = 'Business logic and data access layer'
+    
+    bootJar {
+        enabled = false
+    }
+    
+    jar {
+        enabled = true
+        archiveClassifier = ''
+    }
+}
+
+configure(project(':community-rest')) {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    description = 'REST API layer'
+    
+    bootJar {
+        enabled = false
+    }
+    
+    jar {
+        enabled = true
+        archiveClassifier = ''
+    }
+}
+
+configure(project(':community-client')) {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    description = 'External integration client'
+    
+    bootJar {
+        enabled = false
+    }
+    
+    jar {
+        enabled = true
+        archiveClassifier = ''
+    }
+}
+
+configure(project(':community-boot')) {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    description = 'Application bootstrap and runtime'
+    
+    bootJar {
+        enabled = true
+        archiveClassifier = 'boot'
+        archiveFileName = 'community-service.jar'
+    }
+    
+    jar {
+        enabled = false
+    }
+}

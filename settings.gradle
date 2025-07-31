@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://repo.spring.io/snapshot' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'community-service'
+
+include 'community-spec'
+include 'community-aggregate'
+include 'community-rest'
+include 'community-client'
+include 'community-boot'

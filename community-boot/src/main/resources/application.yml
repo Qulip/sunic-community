@@ -1,0 +1,85 @@
+spring:
+  application:
+    name: community-service
+  profiles:
+    active: local
+    
+  datasource:
+    url: jdbc:mysql://localhost:3306/sunic
+    username: mysuni
+    password: mysuni
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: false
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+      
+  jwt:
+    secretKey: Y2hsZGtkdWRyaGsgZGJkbGZybmpzZG1sIHRqZG5mY2hzc2hhIGR1Z29kZG1zIHJQdGhyZWhsc2VrLiBka3ZkbWZoZWggclB0aHI=
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    com.sunic.community: INFO
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+
+logging:
+  level:
+    com.sunic.community: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+
+logging:
+  level:
+    com.sunic.community: WARN
