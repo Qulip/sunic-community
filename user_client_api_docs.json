@@ -1,0 +1,70 @@
+{
+  "/user/client/checkAdmin/{userId}": {
+    "get": {
+      "tags": ["User Client API"],
+      "summary": "check User Admin",
+      "description": "API For Checking userId is Valid",
+      "operationId": "checkUserIsAdmin",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "success": true,
+                    "message": "Success",
+                    "data": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/user/client/check/{userId}": {
+    "get": {
+      "tags": ["User Client API"],
+      "summary": "check User",
+      "description": "API For Checking userId is Valid",
+      "operationId": "checkUser",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "success": {
+                    "type": "boolean"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "success": true,
+                    "message": "Success",
+                    "data": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
