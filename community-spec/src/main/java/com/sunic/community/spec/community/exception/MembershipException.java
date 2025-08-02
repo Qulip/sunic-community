@@ -1,11 +1,11 @@
 package com.sunic.community.spec.community.exception;
 
 public class MembershipException extends RuntimeException {
-    public MembershipException(String message) {
-        super(message);
-    }
-    
-    public MembershipException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public MembershipException(String message) {
+		super(message);
+	}
+
+	public MembershipException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

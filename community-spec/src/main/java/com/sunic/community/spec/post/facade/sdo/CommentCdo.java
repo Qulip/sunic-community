@@ -7,8 +7,8 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CommentCreateSdo {
-    private final String content;
-    private final Integer postId;
-    private final Integer registrant;
+public class CommentCdo {
+	private final String content;
+	private final Integer postId;
+	private final Integer registrant;
 }

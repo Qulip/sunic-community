@@ -1,6 +1,7 @@
 package com.sunic.community.spec.community.entity;
 
-import com.sunic.community.spec.community.facade.sdo.MemberJoinSdo;
+import com.sunic.community.spec.community.facade.sdo.MemberJoinCdo;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,19 +10,19 @@ import lombok.ToString;
 @Builder
 @ToString
 public class Member {
-    private final Integer id;
-    private final Integer communityId;
-    private final Integer userId;
-    private final Long joinedTime;
-    private final Integer registrant;
+	private Integer id;
+	private Integer communityId;
+	private Integer userId;
+	private Long joinedTime;
+	private Integer registrant;
 
-    public static Member create(MemberJoinSdo sdo) {
-        long currentTime = System.currentTimeMillis();
-        return Member.builder()
-                .communityId(sdo.getCommunityId())
-                .userId(sdo.getUserId())
-                .joinedTime(currentTime)
-                .registrant(sdo.getRegistrant())
-                .build();
-    }
+	public static Member create(MemberJoinCdo sdo) {
+		long currentTime = System.currentTimeMillis();
+		return Member.builder()
+			.communityId(sdo.getCommunityId())
+			.userId(sdo.getUserId())
+			.joinedTime(currentTime)
+			.registrant(sdo.getRegistrant())
+			.build();
+	}
 }

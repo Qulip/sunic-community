@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class MemberLeaveSdo {
-    private final Integer communityId;
-    private final Integer userId;
+public class MemberLeaveCdo {
+	private final Integer communityId;
+	private final Integer userId;
 }

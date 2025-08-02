@@ -19,11 +19,15 @@ dependencies {
     // Minimal dependencies for spec module
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    
+
     // Only essential annotations, no Spring Boot starters
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
-    
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // Test dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'

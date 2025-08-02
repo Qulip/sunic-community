@@ -1,6 +1,8 @@
 package com.sunic.community.spec.post.entity;
 
-import com.sunic.community.spec.post.facade.sdo.CommentCreateSdo;
+import com.sunic.community.spec.post.facade.sdo.CommentCdo;
+import com.sunic.community.spec.post.facade.sdo.CommentRdo;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,32 +11,44 @@ import lombok.ToString;
 @Builder(toBuilder = true)
 @ToString
 public class Comment {
-    private final Integer id;
-    private final String content;
-    private final Integer postId;
-    private final Long registeredTime;
-    private final Integer registrant;
-    private final Long modifiedTime;
-    private final Integer modifier;
+	private Integer id;
+	private String content;
+	private Integer postId;
+	private Long registeredTime;
+	private Integer registrant;
+	private Long modifiedTime;
+	private Integer modifier;
 
-    public static Comment create(CommentCreateSdo sdo) {
-        long currentTime = System.currentTimeMillis();
-        return Comment.builder()
-                .content(sdo.getContent())
-                .postId(sdo.getPostId())
-                .registeredTime(currentTime)
-                .registrant(sdo.getRegistrant())
-                .modifiedTime(currentTime)
-                .modifier(sdo.getRegistrant())
-                .build();
-    }
+	public static Comment create(CommentCdo sdo) {
+		long currentTime = System.currentTimeMillis();
+		return Comment.builder()
+			.content(sdo.getContent())
+			.postId(sdo.getPostId())
+			.registeredTime(currentTime)
+			.registrant(sdo.getRegistrant())
+			.modifiedTime(currentTime)
+			.modifier(sdo.getRegistrant())
+			.build();
+	}
 
-    public Comment updateContent(String newContent, Integer modifier) {
-        long currentTime = System.currentTimeMillis();
-        return this.toBuilder()
-                .content(newContent)
-                .modifiedTime(currentTime)
-                .modifier(modifier)
-                .build();
-    }
+	public Comment updateContent(String newContent, Integer modifier) {
+		long currentTime = System.currentTimeMillis();
+		return this.toBuilder()
+			.content(newContent)
+			.modifiedTime(currentTime)
+			.modifier(modifier)
+			.build();
+	}
+
+	public CommentRdo toRdo() {
+		return CommentRdo.builder()
+			.id(id)
+			.content(content)
+			.postId(postId)
+			.registeredTime(registeredTime)
+			.registrant(registrant)
+			.modifiedTime(modifiedTime)
+			.modifier(modifier)
+			.build();
+	}
 }

@@ -1,5 +1,7 @@
 package com.sunic.community.spec.post.facade.sdo;
 
+import com.sunic.community.spec.post.entity.PostType;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -7,12 +9,10 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CommentRdo {
-	private final Integer id;
+public class PostCdo {
+	private final String title;
 	private final String content;
-	private final Integer postId;
-	private final Long registeredTime;
+	private final PostType postType;
+	private final Integer communityId;
 	private final Integer registrant;
-	private final Long modifiedTime;
-	private final Integer modifier;
 }

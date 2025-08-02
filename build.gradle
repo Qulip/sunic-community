@@ -7,7 +7,7 @@ plugins {
 allprojects {
     group = 'com.sunic'
     version = '0.0.1-SNAPSHOT'
-    
+
     repositories {
         mavenCentral()
         maven { url = 'https://repo.spring.io/snapshot' }
@@ -47,6 +47,8 @@ subprojects {
 
 // Configure specific modules
 configure(project(':community-spec')) {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
     description = 'Domain contracts and specifications'
 }
 
@@ -69,21 +71,6 @@ configure(project(':community-rest')) {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     description = 'REST API layer'
-    
-    bootJar {
-        enabled = false
-    }
-    
-    jar {
-        enabled = true
-        archiveClassifier = ''
-    }
-}
-
-configure(project(':community-client')) {
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-    description = 'External integration client'
     
     bootJar {
         enabled = false

@@ -7,12 +7,11 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class CommentRdo {
-	private final Integer id;
-	private final String content;
+public class CommentQdo {
 	private final Integer postId;
-	private final Long registeredTime;
 	private final Integer registrant;
-	private final Long modifiedTime;
-	private final Integer modifier;
+	private final Integer page;
+	private final Integer size;
+	private final String sortBy;
+	private final String sortDirection;
 }

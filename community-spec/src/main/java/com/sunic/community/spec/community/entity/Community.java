@@ -1,76 +1,93 @@
 package com.sunic.community.spec.community.entity;
 
-import com.sunic.community.spec.community.facade.sdo.CommunityModifySdo;
-import com.sunic.community.spec.community.facade.sdo.CommunityRegisterSdo;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+
+import com.sunic.community.spec.community.facade.sdo.CommunityCdo;
+import com.sunic.community.spec.community.facade.sdo.CommunityRdo;
+import com.sunic.community.spec.community.facade.sdo.CommunityUdo;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.List;
 
 @Getter
 @Builder(toBuilder = true)
 @ToString
 public class Community {
-    private final Integer id;
-    private final CommunityType type;
-    private final String thumbnail;
-    private final String name;
-    private final String description;
-    private final String managerId;
-    private final String managerName;
-    private final String managerEmail;
-    private final Long memberCount;
-    private final Long registeredTime;
-    private final Integer registrant;
-    private final Long modifiedTime;
-    private final Integer modifier;
-    private final String secretNumber;
-    private final boolean allowSelfJoin;
-    private final List<Member> members;
+	private Integer id;
+	private CommunityType type;
+	private String thumbnail;
+	private String name;
+	private String description;
+	private String managerId;
+	private String managerName;
+	private String managerEmail;
+	private Long memberCount;
+	private Long registeredTime;
+	private Integer registrant;
+	private Long modifiedTime;
+	private Integer modifier;
+	private String secretNumber;
+	private boolean allowSelfJoin;
+	private List<Member> members;
 
-    public static Community create(CommunityRegisterSdo sdo) {
-        long currentTime = System.currentTimeMillis();
-        return Community.builder()
-                .type(sdo.getType())
-                .thumbnail(sdo.getThumbnail())
-                .name(sdo.getName())
-                .description(sdo.getDescription())
-                .managerId(sdo.getManagerId())
-                .managerName(sdo.getManagerName())
-                .managerEmail(sdo.getManagerEmail())
-                .memberCount(0L)
-                .registeredTime(currentTime)
-                .registrant(sdo.getRegistrant())
-                .modifiedTime(currentTime)
-                .modifier(sdo.getRegistrant())
-                .secretNumber(sdo.getSecretNumber())
-                .allowSelfJoin(sdo.isAllowSelfJoin())
-                .build();
-    }
+	public static Community create(CommunityCdo sdo) {
+		long currentTime = System.currentTimeMillis();
+		return Community.builder()
+			.type(sdo.getType())
+			.thumbnail(sdo.getThumbnail())
+			.name(sdo.getName())
+			.description(sdo.getDescription())
+			.managerId(sdo.getManagerId())
+			.managerName(sdo.getManagerName())
+			.managerEmail(sdo.getManagerEmail())
+			.memberCount(0L)
+			.registeredTime(currentTime)
+			.registrant(sdo.getRegistrant())
+			.modifiedTime(currentTime)
+			.modifier(sdo.getRegistrant())
+			.secretNumber(sdo.getSecretNumber())
+			.allowSelfJoin(sdo.isAllowSelfJoin())
+			.build();
+	}
 
-    public Community modify(CommunityModifySdo sdo) {
-        long currentTime = System.currentTimeMillis();
-        return this.toBuilder()
-                .type(sdo.getType())
-                .thumbnail(sdo.getThumbnail())
-                .name(sdo.getName())
-                .description(sdo.getDescription())
-                .modifiedTime(currentTime)
-                .modifier(sdo.getModifier())
-                .build();
-    }
+	public void modify(CommunityUdo sdo) {
+		modifiedTime = System.currentTimeMillis();
+		BeanUtils.copyProperties(sdo, this);
+	}
 
-    public Community addMember() {
-        return this.toBuilder()
-                .memberCount(this.memberCount + 1)
-                .build();
-    }
+	public Community addMember() {
+		return this.toBuilder()
+			.memberCount(this.memberCount + 1)
+			.build();
+	}
 
-    public Community removeMember() {
-        long newCount = Math.max(0L, this.memberCount - 1);
-        return this.toBuilder()
-                .memberCount(newCount)
-                .build();
-    }
+	public Community removeMember() {
+		long newCount = Math.max(0L, this.memberCount - 1);
+		return this.toBuilder()
+			.memberCount(newCount)
+			.build();
+	}
+
+	public CommunityRdo toRdo() {
+		return CommunityRdo.builder()
+			.id(id)
+			.type(type)
+			.thumbnail(thumbnail)
+			.name(name)
+			.description(description)
+			.managerId(managerId)
+			.managerName(managerName)
+			.managerEmail(managerEmail)
+			.memberCount(memberCount)
+			.registeredTime(registeredTime)
+			.registrant(registrant)
+			.modifiedTime(modifiedTime)
+			.modifier(modifier)
+			.allowSelfJoin(allowSelfJoin)
+			.secretNumber(secretNumber)
+			.build();
+	}
 }

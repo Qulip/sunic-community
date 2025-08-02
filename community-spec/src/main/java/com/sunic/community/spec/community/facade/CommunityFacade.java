@@ -1,24 +1,32 @@
 package com.sunic.community.spec.community.facade;
 
-import com.sunic.community.spec.community.facade.sdo.*;
-
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
+import com.sunic.community.spec.common.ApiResponse;
+import com.sunic.community.spec.community.facade.sdo.CommunityCdo;
+import com.sunic.community.spec.community.facade.sdo.CommunityRdo;
+import com.sunic.community.spec.community.facade.sdo.CommunityUdo;
+import com.sunic.community.spec.community.facade.sdo.MemberJoinCdo;
+
+import jakarta.validation.Valid;
+
 public interface CommunityFacade {
-    
-    CommunityRdo registerCommunity(CommunityRegisterSdo registerSdo);
-    
-    CommunityRdo modifyCommunity(CommunityModifySdo modifySdo);
-    
-    void deleteCommunity(Integer communityId);
-    
-    CommunityRdo getCommunity(Integer communityId);
-    
-    List<CommunityRdo> getAllCommunities();
-    
-    void joinMember(MemberJoinSdo joinSdo);
-    
-    void leaveMember(MemberLeaveSdo leaveSdo);
-    
-    boolean checkMembership(Integer communityId, Integer userId);
+
+	ResponseEntity<ApiResponse<List<CommunityRdo>>> getAllCommunities();
+
+	ResponseEntity<ApiResponse<CommunityRdo>> getCommunity(Integer id);
+
+	ResponseEntity<ApiResponse<CommunityRdo>> registerCommunity(@Valid CommunityCdo cdo);
+
+	ResponseEntity<ApiResponse<CommunityRdo>> modifyCommunity(Integer id, @Valid CommunityUdo udo);
+
+	ResponseEntity<ApiResponse<Void>> deleteCommunity(Integer id);
+
+	ResponseEntity<ApiResponse<Void>> joinCommunity(Integer id, @Valid MemberJoinCdo cdo);
+
+	ResponseEntity<ApiResponse<Void>> leaveCommunity(Integer id, Integer userId);
+
+	ResponseEntity<ApiResponse<Boolean>> checkMembership(Integer id, Integer userId);
 }

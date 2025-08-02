@@ -3,13 +3,13 @@ spring:
     name: community-service
   profiles:
     active: local
-    
+
   datasource:
     url: jdbc:mysql://localhost:3306/sunic
     username: mysuni
     password: mysuni
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -24,9 +24,9 @@ spring:
         order_inserts: true
         order_updates: true
 
-      
+
   jwt:
-    secretKey: Y2hsZGtkdWRyaGsgZGJkbGZybmpzZG1sIHRqZG5mY2hzc2hhIGR1Z29kZG1zIHJQdGhyZWhsc2VrLiBka3ZkbWZoZWggclB0aHI=
+    secretKey: sunicSUNICsunicSUNIC
 
 management:
   endpoints:
