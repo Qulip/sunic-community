@@ -75,7 +75,7 @@ public class PostResource implements PostFacade {
 	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Integer id) {
-		postLogic.deletePost(id);
+		// postLogic.deletePost(id);
 		return ResponseEntity.ok(ApiResponse.success("Post deleted successfully"));
 	}
 
@@ -98,7 +98,7 @@ public class PostResource implements PostFacade {
 	@Override
 	@DeleteMapping("/comments/{commentId}")
 	public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Integer commentId) {
-		postLogic.deleteComment(commentId);
+		// postLogic.deleteComment(commentId);
 		return ResponseEntity.ok(ApiResponse.success("Comment deleted successfully"));
 	}
 

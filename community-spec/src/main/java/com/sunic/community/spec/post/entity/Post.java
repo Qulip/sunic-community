@@ -11,9 +11,11 @@ import com.sunic.community.spec.post.facade.sdo.PostUdo;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @Builder(toBuilder = true)
 @ToString
 public class Post {

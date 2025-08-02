@@ -4,9 +4,11 @@ import com.sunic.community.spec.community.facade.sdo.MemberJoinCdo;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @Builder
 @ToString
 public class Member {

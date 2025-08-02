@@ -10,9 +10,11 @@ import com.sunic.community.spec.community.facade.sdo.CommunityUdo;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @Builder(toBuilder = true)
 @ToString
 public class Community {
@@ -54,21 +56,16 @@ public class Community {
 	}
 
 	public void modify(CommunityUdo sdo) {
-		modifiedTime = System.currentTimeMillis();
+		this.modifiedTime = System.currentTimeMillis();
 		BeanUtils.copyProperties(sdo, this);
 	}
 
-	public Community addMember() {
-		return this.toBuilder()
-			.memberCount(this.memberCount + 1)
-			.build();
+	public void addMember() {
+		this.memberCount = this.memberCount + 1;
 	}
 
-	public Community removeMember() {
-		long newCount = Math.max(0L, this.memberCount - 1);
-		return this.toBuilder()
-			.memberCount(newCount)
-			.build();
+	public void removeMember() {
+		this.memberCount = Math.max(0L, this.memberCount - 1);
 	}
 
 	public CommunityRdo toRdo() {

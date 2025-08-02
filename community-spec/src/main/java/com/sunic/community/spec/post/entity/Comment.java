@@ -5,9 +5,11 @@ import com.sunic.community.spec.post.facade.sdo.CommentRdo;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @Builder(toBuilder = true)
 @ToString
 public class Comment {
@@ -31,13 +33,11 @@ public class Comment {
 			.build();
 	}
 
-	public Comment updateContent(String newContent, Integer modifier) {
+	public void updateContent(String newContent, Integer modifier) {
 		long currentTime = System.currentTimeMillis();
-		return this.toBuilder()
-			.content(newContent)
-			.modifiedTime(currentTime)
-			.modifier(modifier)
-			.build();
+		this.content = newContent;
+		this.modifiedTime = currentTime;
+		this.modifier = modifier;
 	}
 
 	public CommentRdo toRdo() {

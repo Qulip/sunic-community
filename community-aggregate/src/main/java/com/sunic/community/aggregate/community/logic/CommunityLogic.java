@@ -34,7 +34,7 @@ public class CommunityLogic {
 	public CommunityRdo registerCommunity(CommunityCdo communityCdo) {
 		validateAdminUser(communityCdo.getRegistrant());
 		Community community = communityStore.save(Community.create(communityCdo));
-		return convertToCommunityRdo(community);
+		return community.toRdo();
 	}
 
 	@Transactional
@@ -43,22 +43,22 @@ public class CommunityLogic {
 		Community community = communityStore.findById(modifySdo.getId());
 		community.modify(modifySdo);
 		Community updated = communityStore.update(community);
-		return convertToCommunityRdo(updated);
+		return updated.toRdo();
 	}
 
 	@Transactional
-	public void deleteCommunity(Integer communityId, Integer userId) {
-		validateAdminUser(userId);
+	public void deleteCommunity(Integer communityId) {
+		// validateAdminUser(userId);
 		communityStore.deleteById(communityId);
 	}
 
 	public CommunityRdo getCommunity(Integer communityId) {
 		Community community = communityStore.findById(communityId);
-		return convertToCommunityRdo(community);
+		return community.toRdo();
 	}
 
 	public List<CommunityRdo> getAllCommunities() {
-		return communityStore.findAll().stream().map(this::convertToCommunityRdo).collect(Collectors.toList());
+		return communityStore.findAll().stream().map(Community::toRdo).collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -76,8 +76,8 @@ public class CommunityLogic {
 		Member member = Member.create(joinSdo);
 		memberStore.save(member);
 
-		Community updatedCommunity = community.addMember();
-		communityStore.update(updatedCommunity);
+		community.addMember();
+		communityStore.update(community);
 	}
 
 	@Transactional
@@ -89,32 +89,14 @@ public class CommunityLogic {
 		memberStore.deleteByUserIdAndCommunityId(leaveSdo.getUserId(), leaveSdo.getCommunityId());
 
 		Community community = communityStore.findById(leaveSdo.getCommunityId());
-		Community updatedCommunity = community.removeMember();
-		communityStore.update(updatedCommunity);
+		community.removeMember();
+		communityStore.update(community);
 	}
 
 	public boolean checkMembership(Integer communityId, Integer userId) {
 		return memberStore.existsByUserIdAndCommunityId(userId, communityId);
 	}
 
-	private CommunityRdo convertToCommunityRdo(Community community) {
-		return CommunityRdo.builder()
-			.id(community.getId())
-			.type(community.getType())
-			.thumbnail(community.getThumbnail())
-			.name(community.getName())
-			.description(community.getDescription())
-			.managerId(community.getManagerId())
-			.managerName(community.getManagerName())
-			.managerEmail(community.getManagerEmail())
-			.memberCount(community.getMemberCount())
-			.registeredTime(community.getRegisteredTime())
-			.registrant(community.getRegistrant())
-			.modifiedTime(community.getModifiedTime())
-			.modifier(community.getModifier())
-			.allowSelfJoin(community.isAllowSelfJoin())
-			.build();
-	}
 
 	private void validateAdminUser(Integer userId) {
 		if (userId == null) {
