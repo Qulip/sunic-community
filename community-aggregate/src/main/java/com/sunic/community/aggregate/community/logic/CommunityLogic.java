@@ -12,7 +12,6 @@ import com.sunic.community.aggregate.proxy.UserProxy;
 import com.sunic.community.spec.community.entity.Community;
 import com.sunic.community.spec.community.entity.Member;
 import com.sunic.community.spec.community.exception.MembershipException;
-import com.sunic.community.spec.common.exception.UnauthorizedException;
 import com.sunic.community.spec.community.facade.sdo.CommunityCdo;
 import com.sunic.community.spec.community.facade.sdo.CommunityRdo;
 import com.sunic.community.spec.community.facade.sdo.CommunityUdo;
@@ -32,14 +31,14 @@ public class CommunityLogic {
 
 	@Transactional
 	public CommunityRdo registerCommunity(CommunityCdo communityCdo) {
-		validateAdminUser(communityCdo.getRegistrant());
+		userProxy.validateAdminUser(communityCdo.getRegistrant());
 		Community community = communityStore.save(Community.create(communityCdo));
 		return community.toRdo();
 	}
 
 	@Transactional
 	public CommunityRdo modifyCommunity(CommunityUdo modifySdo) {
-		validateAdminUser(modifySdo.getModifier());
+		userProxy.validateAdminUser(modifySdo.getModifier());
 		Community community = communityStore.findById(modifySdo.getId());
 		community.modify(modifySdo);
 		Community updated = communityStore.update(community);
@@ -47,8 +46,8 @@ public class CommunityLogic {
 	}
 
 	@Transactional
-	public void deleteCommunity(Integer communityId) {
-		// validateAdminUser(userId);
+	public void deleteCommunity(Integer communityId, Integer userId) {
+		userProxy.validateAdminUser(userId);
 		communityStore.deleteById(communityId);
 	}
 
@@ -95,15 +94,5 @@ public class CommunityLogic {
 
 	public boolean checkMembership(Integer communityId, Integer userId) {
 		return memberStore.existsByUserIdAndCommunityId(userId, communityId);
-	}
-
-
-	private void validateAdminUser(Integer userId) {
-		if (userId == null) {
-			throw new UnauthorizedException("User ID is required");
-		}
-		if (!userProxy.checkUserIsAdmin(userId)) {
-			throw new UnauthorizedException("Admin privileges required for this operation");
-		}
 	}
 }

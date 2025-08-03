@@ -23,11 +23,11 @@ public interface PostFacade {
 
 	ResponseEntity<ApiResponse<PostRdo>> updatePost(Integer id, @Valid PostUdo udo);
 
-	ResponseEntity<ApiResponse<Void>> deletePost(Integer id);
+	ResponseEntity<ApiResponse<Void>> deletePost(Integer id, Integer userId);
 
 	ResponseEntity<ApiResponse<CommentRdo>> createComment(Integer id, @Valid CommentCdo cdo);
 
-	ResponseEntity<ApiResponse<Void>> deleteComment(Integer commentId);
+	ResponseEntity<ApiResponse<Void>> deleteComment(Integer commentId, Integer userId);
 
 	ResponseEntity<ApiResponse<List<CommentRdo>>> getCommentsByPost(Integer id);
 }

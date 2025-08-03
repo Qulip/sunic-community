@@ -1,12 +1,14 @@
 package com.sunic.community.aggregate.proxy;
 
-import com.sunic.community.spec.common.ApiResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+
+import com.sunic.community.spec.common.ApiResponse;
+import com.sunic.community.spec.common.exception.UnauthorizedException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -18,13 +20,31 @@ public class UserProxy {
     @Value("${user.client.base-url:http://localhost:8080}")
     private String userServiceBaseUrl;
 
+    public void validateUser(Integer userId) {
+        if (userId == null) {
+            throw new UnauthorizedException("User ID is required");
+        }
+        if (!checkUser(userId)) {
+            throw new UnauthorizedException("Valid user required for this operation");
+        }
+    }
+
+    public void validateAdminUser(Integer userId) {
+        if (userId == null) {
+            throw new UnauthorizedException("User ID is required");
+        }
+        if (!checkUserIsAdmin(userId)) {
+            throw new UnauthorizedException("Admin privileges required for this operation");
+        }
+    }
+
     /**
      * Check if a user exists and is valid
      *
      * @param userId the user ID to check
      * @return true if user is valid, false otherwise
      */
-    public boolean checkUser(Integer userId) {
+    private boolean checkUser(Integer userId) {
         try {
             ApiResponse<Boolean> response = webClient
                 .get()
@@ -47,7 +67,7 @@ public class UserProxy {
      * @param userId the user ID to check
      * @return true if user is admin, false otherwise
      */
-    public boolean checkUserIsAdmin(Integer userId) {
+    private boolean checkUserIsAdmin(Integer userId) {
         try {
             ApiResponse<Boolean> response = webClient
                 .get()

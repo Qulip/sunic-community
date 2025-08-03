@@ -60,22 +60,14 @@ public class PostResource implements PostFacade {
 	public ResponseEntity<ApiResponse<PostRdo>> updatePost(
 		@PathVariable Integer id,
 		@Valid @RequestBody PostUdo udo) {
-		PostUdo updatedUdo = PostUdo.builder()
-			.id(id)
-			.title(udo.getTitle())
-			.content(udo.getContent())
-			.postType(udo.getPostType())
-			.modifier(udo.getModifier())
-			.build();
-
-		PostRdo post = postLogic.updatePost(updatedUdo);
+		PostRdo post = postLogic.updatePost(udo);
 		return ResponseEntity.ok(ApiResponse.success("Post updated successfully", post));
 	}
 
 	@Override
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Integer id) {
-		// postLogic.deletePost(id);
+	public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Integer id, @RequestParam Integer userId) {
+		postLogic.deletePost(id, userId);
 		return ResponseEntity.ok(ApiResponse.success("Post deleted successfully"));
 	}
 
@@ -97,8 +89,9 @@ public class PostResource implements PostFacade {
 
 	@Override
 	@DeleteMapping("/comments/{commentId}")
-	public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Integer commentId) {
-		// postLogic.deleteComment(commentId);
+	public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Integer commentId,
+		@RequestParam Integer userId) {
+		postLogic.deleteComment(commentId, userId);
 		return ResponseEntity.ok(ApiResponse.success("Comment deleted successfully"));
 	}
 

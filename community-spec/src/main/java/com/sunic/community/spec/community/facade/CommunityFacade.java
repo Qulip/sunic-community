@@ -22,7 +22,7 @@ public interface CommunityFacade {
 
 	ResponseEntity<ApiResponse<CommunityRdo>> modifyCommunity(Integer id, @Valid CommunityUdo udo);
 
-	ResponseEntity<ApiResponse<Void>> deleteCommunity(Integer id);
+	ResponseEntity<ApiResponse<Void>> deleteCommunity(Integer id, Integer userId);
 
 	ResponseEntity<ApiResponse<Void>> joinCommunity(Integer id, @Valid MemberJoinCdo cdo);
 

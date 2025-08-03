@@ -16,7 +16,6 @@ import com.sunic.community.spec.post.facade.sdo.CommentRdo;
 import com.sunic.community.spec.post.facade.sdo.PostCdo;
 import com.sunic.community.spec.post.facade.sdo.PostRdo;
 import com.sunic.community.spec.post.facade.sdo.PostUdo;
-import com.sunic.community.spec.common.exception.UnauthorizedException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +30,7 @@ public class PostLogic {
 
 	@Transactional
 	public PostRdo createPost(PostCdo createSdo) {
-		validateUser(createSdo.getRegistrant());
+		userProxy.validateUser(createSdo.getRegistrant());
 		Post post = Post.create(createSdo);
 		Post saved = postStore.save(post);
 		return saved.toRdo();
@@ -39,7 +38,7 @@ public class PostLogic {
 
 	@Transactional
 	public PostRdo updatePost(PostUdo updateSdo) {
-		validateUser(updateSdo.getModifier());
+		userProxy.validateUser(updateSdo.getModifier());
 		Post post = postStore.findById(updateSdo.getId());
 		post.update(updateSdo);
 		Post updated = postStore.update(post);
@@ -48,7 +47,7 @@ public class PostLogic {
 
 	@Transactional
 	public void deletePost(Integer postId, Integer userId) {
-		validateUser(userId);
+		userProxy.validateUser(userId);
 		postStore.deleteById(postId);
 	}
 
@@ -64,7 +63,7 @@ public class PostLogic {
 
 	@Transactional
 	public CommentRdo createComment(CommentCdo createSdo) {
-		validateUser(createSdo.getRegistrant());
+		userProxy.validateUser(createSdo.getRegistrant());
 		Comment comment = Comment.create(createSdo);
 		Comment saved = commentStore.save(comment);
 		return saved.toRdo();
@@ -72,7 +71,7 @@ public class PostLogic {
 
 	@Transactional
 	public void deleteComment(Integer commentId, Integer userId) {
-		validateUser(userId);
+		userProxy.validateUser(userId);
 		commentStore.deleteById(commentId);
 	}
 
@@ -80,14 +79,5 @@ public class PostLogic {
 		return commentStore.findByPostId(postId).stream()
 			.map(Comment::toRdo)
 			.collect(Collectors.toList());
-	}
-
-	private void validateUser(Integer userId) {
-		if (userId == null) {
-			throw new UnauthorizedException("User ID is required");
-		}
-		if (!userProxy.checkUser(userId)) {
-			throw new UnauthorizedException("Valid user required for this operation");
-		}
 	}
 }

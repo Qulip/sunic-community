@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunic.community.aggregate.community.logic.CommunityLogic;
@@ -74,8 +75,8 @@ public class CommunityResource implements CommunityFacade {
 
 	@Override
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ApiResponse<Void>> deleteCommunity(@PathVariable Integer id) {
-		communityLogic.deleteCommunity(id);
+	public ResponseEntity<ApiResponse<Void>> deleteCommunity(@PathVariable Integer id, @RequestParam Integer userId) {
+		communityLogic.deleteCommunity(id, userId);
 		return ResponseEntity.ok(ApiResponse.success("Community deleted successfully"));
 	}
 
